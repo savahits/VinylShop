@@ -37,6 +37,7 @@ public class ArtistService {
         if (!artistRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого артиста нет!");
         }
+        artistRepository.deleteById(id);
     }
 
 }
