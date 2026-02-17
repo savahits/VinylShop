@@ -11,7 +11,19 @@ import java.util.stream.Collectors;
 @Component
 public class ArtistToDtoMapper {
 
-    public MultipleArtistsShowDTO toShowDTO(Artist artist) {
+    public ArtistShowDTO toShowDTO(Artist artist) {
+        if (artist == null) {
+            return null;
+        }
+        return new ArtistShowDTO(
+                artist.getId(),
+                artist.getNickname(),
+                artist.getDescription(),
+                artist.getDiscography()
+        );
+    }
+
+    public MultipleArtistsShowDTO toMultipleShowDTO(Artist artist) {
         if (artist == null) {
             return null;
         }
@@ -20,12 +32,13 @@ public class ArtistToDtoMapper {
                 artist.getNickname()
         );
     }
+
     public List<MultipleArtistsShowDTO> toShowDTOList(List<Artist> artists) {
         if (artists == null) {
             return List.of();
         }
         return artists.stream()
-                .map(this::toShowDTO)
+                .map(this::toMultipleShowDTO)
                 .collect(Collectors.toList());
     }
 
