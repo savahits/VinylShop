@@ -1,10 +1,8 @@
 package ru.shmelev.vinylshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import ru.shmelev.vinylshop.DTO.ArtistShowDTO;
 import ru.shmelev.vinylshop.DTO.MultipleArtistsShowDTO;
 import ru.shmelev.vinylshop.service.ArtistService;
@@ -30,6 +28,12 @@ public class ArtistController {
     @GetMapping("{id}")
     public ArtistShowDTO getArtist(@PathVariable Long id) {
         return artistService.getArtistById(id);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteArtist(@PathVariable Long id) {
+        artistService.deleteArtistById(id);
     }
 
 }
