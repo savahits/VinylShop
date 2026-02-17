@@ -2,12 +2,17 @@ package ru.shmelev.vinylshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.shmelev.vinylshop.DTO.ArtistShowDTO;
+import ru.shmelev.vinylshop.DTO.GenreResponseDTO;
 import ru.shmelev.vinylshop.DTO.MultipleArtistsShowDTO;
+import ru.shmelev.vinylshop.domain.Genre;
 import ru.shmelev.vinylshop.service.ArtistService;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/artists")
@@ -28,6 +33,18 @@ public class ArtistController {
     @GetMapping("{id}")
     public ArtistShowDTO getArtist(@PathVariable Long id) {
         return artistService.getArtistById(id);
+    }
+
+    @GetMapping("/{id}/genres")
+    public ResponseEntity<Set<GenreResponseDTO>> getGenresByArtistId(@PathVariable Long id) {
+
+        Set<Genre> genres = artistService.getGenresByArtistId(id);
+
+        Set<GenreResponseDTO> genreDtos = genres.stream()
+                .map(g -> new GenreResponseDTO(g.getId(), g.getName()))
+                .collect(Collectors.toSet());
+
+        return ResponseEntity.ok(genreDtos);
     }
 
     @DeleteMapping("{id}")
