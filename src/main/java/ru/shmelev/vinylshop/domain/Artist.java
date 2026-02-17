@@ -8,7 +8,9 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -32,6 +34,10 @@ public class Artist {
 
     @OneToMany(mappedBy = "artist")
     private List<Product> products = new ArrayList<>();
+
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "integer[]")
+    private Set<Long> genreIds = new HashSet<>();
 
     @Data
     @NoArgsConstructor
