@@ -33,4 +33,10 @@ public class ArtistService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого артиста нет!"));
     }
 
+    public void deleteArtistById(Long id) {
+        if (!artistRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого артиста нет!");
+        }
+    }
+
 }
