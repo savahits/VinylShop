@@ -1,6 +1,6 @@
 package ru.shmelev.vinylshop.DTO;
 
-public record ArtistsShowDTO(
+public record MultipleArtistsShowDTO(
         Long id,
         String nickname
 ) {

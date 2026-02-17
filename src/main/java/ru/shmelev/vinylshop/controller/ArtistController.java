@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shmelev.vinylshop.DTO.ArtistsShowDTO;
-import ru.shmelev.vinylshop.domain.Artist;
+import ru.shmelev.vinylshop.DTO.MultipleArtistsShowDTO;
 import ru.shmelev.vinylshop.service.ArtistService;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class ArtistController {
     }
 
     @GetMapping
-    public List<ArtistsShowDTO> getArtists() {
+    public List<MultipleArtistsShowDTO> getArtists() {
         return artistService.getAllArtists();
     }
 

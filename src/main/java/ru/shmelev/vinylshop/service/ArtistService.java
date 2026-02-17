@@ -2,7 +2,7 @@ package ru.shmelev.vinylshop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.shmelev.vinylshop.DTO.ArtistsShowDTO;
+import ru.shmelev.vinylshop.DTO.MultipleArtistsShowDTO;
 import ru.shmelev.vinylshop.mappers.ArtistToDtoMapper;
 import ru.shmelev.vinylshop.repository.ArtistRepository;
 
@@ -20,7 +20,7 @@ public class ArtistService {
         this.artistToDtoMapper = artistToDtoMapper;
     }
 
-    public List<ArtistsShowDTO> getAllArtists() {
+    public List<MultipleArtistsShowDTO> getAllArtists() {
         return artistToDtoMapper.toShowDTOList(artistRepository.findAll());
     }
 
