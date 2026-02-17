@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.shmelev.vinylshop.domain.Artist;
 
 @Repository
-public interface ArtistRepository  extends JpaRepository<Long, Artist> {
+public interface ArtistRepository  extends JpaRepository<Artist, Long> {
 }
