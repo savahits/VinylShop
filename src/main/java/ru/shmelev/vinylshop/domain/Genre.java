@@ -25,4 +25,7 @@ public class Genre {
 
     @ManyToMany(mappedBy = "genres")
     private Set<Product> products = new HashSet<>();
+
+    @ManyToMany(mappedBy = "genres")
+    private Set<Artist> artists = new HashSet<>();
 }
