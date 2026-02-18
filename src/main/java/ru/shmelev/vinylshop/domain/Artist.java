@@ -35,9 +35,13 @@ public class Artist {
     @OneToMany(mappedBy = "artist")
     private List<Product> products = new ArrayList<>();
 
-    @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(columnDefinition = "integer[]")
-    private Set<Long> genreIds = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "artist_genres",
+            joinColumns = @JoinColumn(name = "artist_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres = new HashSet<>();
 
     @Data
     @NoArgsConstructor
