@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.shmelev.vinylshop.DTO.ArtistShowDTO;
 import ru.shmelev.vinylshop.DTO.GenreResponseDTO;
 import ru.shmelev.vinylshop.DTO.MultipleArtistsShowDTO;
+import ru.shmelev.vinylshop.DTO.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.domain.Genre;
 import ru.shmelev.vinylshop.service.ArtistService;
 
@@ -33,6 +34,11 @@ public class ArtistController {
     @GetMapping("{id}")
     public ArtistShowDTO getArtist(@PathVariable Long id) {
         return artistService.getArtistById(id);
+    }
+
+    @GetMapping("{id}/vinyls")
+    public List<MultipleVinylShowDTO> getVinyls(@PathVariable Long id) {
+        return artistService.getArtistVinyls(id);
     }
 
     @GetMapping("/{id}/genres")
