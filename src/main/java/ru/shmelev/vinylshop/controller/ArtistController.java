@@ -42,15 +42,8 @@ public class ArtistController {
     }
 
     @GetMapping("/{id}/genres")
-    public ResponseEntity<Set<GenreResponseDTO>> getGenresByArtistId(@PathVariable Long id) {
-
-        Set<Genre> genres = artistService.getGenresByArtistId(id);
-
-        Set<GenreResponseDTO> genreDtos = genres.stream()
-                .map(g -> new GenreResponseDTO(g.getId(), g.getName()))
-                .collect(Collectors.toSet());
-
-        return ResponseEntity.ok(genreDtos);
+    public Set<GenreResponseDTO> getGenresByArtistId(@PathVariable Long id) {
+        return artistService.getGenresByArtistId(id);
     }
 
     @DeleteMapping("{id}")
