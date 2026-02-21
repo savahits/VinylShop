@@ -1,10 +1,7 @@
 package ru.shmelev.vinylshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.shmelev.vinylshop.DTO.GenreResponseDTO;
 import ru.shmelev.vinylshop.DTO.MultipleArtistsShowDTO;
 import ru.shmelev.vinylshop.service.GenreService;
@@ -26,6 +23,12 @@ public class GenreController {
     public List<GenreResponseDTO> getAllGenres() {
         return genreService.findAll();
     }
+
+    @DeleteMapping("{id}")
+    public void deleteGenre(@PathVariable Long id) {
+        genreService.deleteGenreById(id);
+    }
+
 
     @GetMapping("/{id}/artists")
     public List<MultipleArtistsShowDTO> getArtistsByGenre(@PathVariable Long id) {
