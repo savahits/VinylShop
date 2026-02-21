@@ -13,4 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p JOIN FETCH p.genres WHERE p.artist.id = :artistId AND p.format = 'vinyl'")
     List<Product> findAllVinylsByArtistIdWithGenres(@Param("artistId") Long artistId);
+
+    @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN p.genres g WHERE g.id = :genreId AND p.format = 'vinyl'")
+    List<Product> findByGenreIdAndFormatWithArtist(@Param("genreId") Long genreId);
 }
