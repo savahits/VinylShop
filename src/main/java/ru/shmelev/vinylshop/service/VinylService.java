@@ -26,6 +26,9 @@ public class VinylService {
     }
 
     public List<MultipleVinylShowDTO> getVinylsByGenre(Long genreId) {
+        if (!productRepository.existsById(genreId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого жанра нет!");
+        }
         List<Product> products = productRepository.findByGenreIdAndFormatWithArtist(genreId);
         return products.stream()
                 .map(this::toDto)
