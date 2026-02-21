@@ -48,4 +48,12 @@ public class GenreService {
         return artistToDtoMapper.toShowDTOList(artists);
     }
 
+    public void deleteGenreById(Long genreId) {
+        if (!genreRepository.existsById(genreId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Жанр не найден");
+        }
+
+        genreRepository.deleteById(genreId);
+    }
+
 }
