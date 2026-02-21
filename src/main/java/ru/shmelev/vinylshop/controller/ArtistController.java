@@ -2,28 +2,31 @@ package ru.shmelev.vinylshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.shmelev.vinylshop.DTO.ArtistShowDTO;
 import ru.shmelev.vinylshop.DTO.GenreResponseDTO;
 import ru.shmelev.vinylshop.DTO.MultipleArtistsShowDTO;
 import ru.shmelev.vinylshop.DTO.MultipleVinylShowDTO;
-import ru.shmelev.vinylshop.domain.Genre;
 import ru.shmelev.vinylshop.service.ArtistService;
+import ru.shmelev.vinylshop.service.GenreService;
+import ru.shmelev.vinylshop.service.VinylService;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/artists")
 public class ArtistController {
 
     private final ArtistService artistService;
+    private final GenreService genreService;
+    private final VinylService vinylService;
 
     @Autowired
-    public ArtistController(ArtistService artistService) {
+    public ArtistController(ArtistService artistService, GenreService genreService, VinylService vinylService) {
         this.artistService = artistService;
+        this.genreService = genreService;
+        this.vinylService = vinylService;
     }
 
     @GetMapping
@@ -38,12 +41,12 @@ public class ArtistController {
 
     @GetMapping("{id}/vinyls")
     public List<MultipleVinylShowDTO> getVinyls(@PathVariable Long id) {
-        return artistService.getArtistVinyls(id);
+        return vinylService.getArtistVinyls(id);
     }
 
     @GetMapping("/{id}/genres")
     public Set<GenreResponseDTO> getGenresByArtistId(@PathVariable Long id) {
-        return artistService.getGenresByArtistId(id);
+        return genreService.getGenresByArtistId(id);
     }
 
     @DeleteMapping("{id}")
