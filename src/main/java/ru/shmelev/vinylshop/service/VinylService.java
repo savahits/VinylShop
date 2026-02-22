@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.shmelev.vinylshop.DTO.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.domain.Genre;
 import ru.shmelev.vinylshop.domain.Product;
+import ru.shmelev.vinylshop.repository.ArtistRepository;
 import ru.shmelev.vinylshop.repository.GenreRepository;
 import ru.shmelev.vinylshop.repository.ProductRepository;
 
@@ -19,11 +20,13 @@ public class VinylService {
 
     private final ProductRepository productRepository;
     private final GenreRepository genreRepository;
+    private final ArtistRepository artistRepository;
 
     @Autowired
-    public VinylService(ProductRepository productRepository, GenreRepository genreRepository) {
+    public VinylService(ProductRepository productRepository, GenreRepository genreRepository, ArtistRepository artistRepository) {
         this.productRepository = productRepository;
         this.genreRepository = genreRepository;
+        this.artistRepository = artistRepository;
     }
 
     public List<MultipleVinylShowDTO> getVinylsByGenre(Long genreId) {
@@ -63,8 +66,8 @@ public class VinylService {
     }
 
     public List<MultipleVinylShowDTO> getArtistVinyls(Long artistId) {
-        if (!genreRepository.existsById(artistId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого жанра нет!");
+        if (!artistRepository.existsById(artistId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого артиста нет!");
         }
 
         List<Product> vinyls = productRepository.findAllVinylsByArtistIdWithGenres(artistId);
