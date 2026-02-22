@@ -1,7 +1,11 @@
 package ru.shmelev.vinylshop.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.shmelev.vinylshop.DTO.GenreCreateDTO;
 import ru.shmelev.vinylshop.DTO.GenreResponseDTO;
 import ru.shmelev.vinylshop.DTO.MultipleArtistsShowDTO;
 import ru.shmelev.vinylshop.DTO.MultipleVinylShowDTO;
@@ -9,6 +13,7 @@ import ru.shmelev.vinylshop.service.ArtistService;
 import ru.shmelev.vinylshop.service.GenreService;
 import ru.shmelev.vinylshop.service.VinylService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -29,6 +34,19 @@ public class GenreController {
     @GetMapping
     public List<GenreResponseDTO> getAllGenres() {
         return genreService.findAll();
+    }
+
+    @PostMapping
+    public ResponseEntity<GenreResponseDTO> createGenre(@Valid @RequestBody GenreCreateDTO dto) {
+        GenreResponseDTO created = genreService.createGenre(dto);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(created.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(created);
     }
 
     @DeleteMapping("{id}")
