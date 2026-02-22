@@ -7,9 +7,10 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.shmelev.vinylshop.DTO.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.domain.Genre;
 import ru.shmelev.vinylshop.domain.Product;
-import ru.shmelev.vinylshop.repository.ArtistRepository;
+import ru.shmelev.vinylshop.repository.GenreRepository;
 import ru.shmelev.vinylshop.repository.ProductRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,30 +18,43 @@ import java.util.stream.Collectors;
 public class VinylService {
 
     private final ProductRepository productRepository;
-    private final ArtistRepository artistRepository;
+    private final GenreRepository genreRepository;
 
     @Autowired
-    public VinylService(ProductRepository productRepository, ArtistRepository artistRepository) {
+    public VinylService(ProductRepository productRepository, GenreRepository genreRepository) {
         this.productRepository = productRepository;
-        this.artistRepository = artistRepository;
+        this.genreRepository = genreRepository;
     }
 
     public List<MultipleVinylShowDTO> getVinylsByGenre(Long genreId) {
-        if (!productRepository.existsById(genreId)) {
+        if (!genreRepository.existsById(genreId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого жанра нет!");
         }
+
         List<Product> products = productRepository.findByGenreIdAndFormatWithArtist(genreId);
+
+        if (products.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return products.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
     private MultipleVinylShowDTO toDto(Product product) {
-        String artistName = product.getArtist().getNickname();
-        List<String> genreNames = product.getGenres().stream()
+        String artistName = product.getArtist() != null
+                ? product.getArtist().getNickname()
+                : "Unknown Artist";
+
+        List<String> genreNames = product.getGenres() != null
+                ? product.getGenres().stream()
                 .map(Genre::getName)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                : Collections.emptyList();
+
         return new MultipleVinylShowDTO(
+                product.getId(),
                 product.getTitle(),
                 artistName,
                 genreNames,
@@ -49,8 +63,8 @@ public class VinylService {
     }
 
     public List<MultipleVinylShowDTO> getArtistVinyls(Long artistId) {
-        if (!artistRepository.existsById(artistId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого артиста нет!");
+        if (!genreRepository.existsById(artistId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого жанра нет!");
         }
 
         List<Product> vinyls = productRepository.findAllVinylsByArtistIdWithGenres(artistId);
@@ -65,10 +79,15 @@ public class VinylService {
                 .collect(Collectors.toList());
 
         return new MultipleVinylShowDTO(
+                product.getId(),
                 product.getTitle(),
                 product.getArtist().getNickname(),
                 genreNames,
                 product.getPrice()
         );
     }
+
 }
+
+
+
