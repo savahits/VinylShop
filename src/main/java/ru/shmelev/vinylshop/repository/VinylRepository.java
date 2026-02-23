@@ -9,7 +9,7 @@ import ru.shmelev.vinylshop.domain.Product;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface VinylRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p JOIN FETCH p.genres WHERE p.artist.id = :artistId AND p.format = 'vinyl'")
     List<Product> findAllVinylsByArtistIdWithGenres(@Param("artistId") Long artistId);

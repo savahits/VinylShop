@@ -12,7 +12,7 @@ import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.mappers.VinylToDtoMapper;
 import ru.shmelev.vinylshop.repository.ArtistRepository;
 import ru.shmelev.vinylshop.repository.GenreRepository;
-import ru.shmelev.vinylshop.repository.ProductRepository;
+import ru.shmelev.vinylshop.repository.VinylRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,15 +21,15 @@ import java.util.stream.Collectors;
 @Service
 public class VinylService {
 
-    private final ProductRepository productRepository;
+    private final VinylRepository vinylRepository;
     private final GenreRepository genreRepository;
     private final ArtistRepository artistRepository;
     private final VinylToDtoMapper vinylToDtoMapper;
 
     @Autowired
-    public VinylService(ProductRepository productRepository, GenreRepository genreRepository, ArtistRepository artistRepository,
+    public VinylService(VinylRepository vinylRepository, GenreRepository genreRepository, ArtistRepository artistRepository,
                         VinylToDtoMapper vinylToDtoMapper) {
-        this.productRepository = productRepository;
+        this.vinylRepository = vinylRepository;
         this.genreRepository = genreRepository;
         this.artistRepository = artistRepository;
         this.vinylToDtoMapper = vinylToDtoMapper;
@@ -40,7 +40,7 @@ public class VinylService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого жанра нет!");
         }
 
-        List<Product> products = productRepository.findByGenreIdAndFormatWithArtist(genreId);
+        List<Product> products = vinylRepository.findByGenreIdAndFormatWithArtist(genreId);
 
         if (products.isEmpty()) {
             return Collections.emptyList();
@@ -76,7 +76,7 @@ public class VinylService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого артиста нет!");
         }
 
-        List<Product> vinyls = productRepository.findAllVinylsByArtistIdWithGenres(artistId);
+        List<Product> vinyls = vinylRepository.findAllVinylsByArtistIdWithGenres(artistId);
 
         return vinyls.stream()
                 .map(this::mapToVinylShowDTO)
@@ -98,7 +98,7 @@ public class VinylService {
 
     @Transactional
     public VinylShowDTO getVinylById(Long id) {
-        return productRepository.findById(id)
+        return vinylRepository.findById(id)
                 .map(vinylToDtoMapper::toVinylShowDTO)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого винила нет!"));
     }
