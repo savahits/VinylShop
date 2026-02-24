@@ -3,7 +3,9 @@ package ru.shmelev.vinylshop.mappers;
 import org.springframework.stereotype.Component;
 import ru.shmelev.vinylshop.DTO.*;
 import ru.shmelev.vinylshop.DTO.artist.ArtistDTO;
+import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.VinylShowDTO;
+import ru.shmelev.vinylshop.domain.Genre;
 import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.domain.Product.Track;
 
@@ -70,13 +72,9 @@ public class VinylToDtoMapper {
         return otherAttributes != null ? otherAttributes : Collections.emptyMap();
     }
 
-    public List<VinylShowDTO> toVinylShowDTOList(List<Product> products) {
-        if (products == null || products.isEmpty()) {
-            return Collections.emptyList();
-        }
+    public MultipleVinylShowDTO mapToVinylShowDTO(Product product) {
+        List<String> genreNames = product.getGenres().stream().map(Genre::getName).collect(Collectors.toList());
 
-        return products.stream()
-                .map(this::toVinylShowDTO)
-                .collect(Collectors.toList());
+        return new MultipleVinylShowDTO(product.getId(), product.getTitle(), product.getArtist().getNickname(), genreNames, product.getPrice());
     }
 }

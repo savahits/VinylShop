@@ -63,14 +63,10 @@ public class VinylService {
 
         List<Product> vinyls = vinylRepository.findAllVinylsByArtistIdWithGenres(artistId);
 
-        return vinyls.stream().map(this::mapToVinylShowDTO).collect(Collectors.toList());
+        return vinyls.stream().map(vinylToDtoMapper::mapToVinylShowDTO).collect(Collectors.toList());
     }
 
-    private MultipleVinylShowDTO mapToVinylShowDTO(Product product) {
-        List<String> genreNames = product.getGenres().stream().map(Genre::getName).collect(Collectors.toList());
 
-        return new MultipleVinylShowDTO(product.getId(), product.getTitle(), product.getArtist().getNickname(), genreNames, product.getPrice());
-    }
 
     @Transactional
     public VinylShowDTO getVinylById(Long id) {
@@ -79,7 +75,7 @@ public class VinylService {
 
     public List<MultipleVinylShowDTO> getAllVinyls() {
         List<Product> products = vinylRepository.findAllVinyls();
-        return products.stream().map(this::mapToVinylShowDTO).collect(Collectors.toList());
+        return products.stream().map(vinylToDtoMapper::mapToVinylShowDTO).collect(Collectors.toList());
     }
 
 }
