@@ -27,8 +27,7 @@ public class VinylService {
     private final VinylToDtoMapper vinylToDtoMapper;
 
     @Autowired
-    public VinylService(VinylRepository vinylRepository, GenreRepository genreRepository, ArtistRepository artistRepository,
-                        VinylToDtoMapper vinylToDtoMapper) {
+    public VinylService(VinylRepository vinylRepository, GenreRepository genreRepository, ArtistRepository artistRepository, VinylToDtoMapper vinylToDtoMapper) {
         this.vinylRepository = vinylRepository;
         this.genreRepository = genreRepository;
         this.artistRepository = artistRepository;
@@ -46,29 +45,15 @@ public class VinylService {
             return Collections.emptyList();
         }
 
-        return products.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+        return products.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     private MultipleVinylShowDTO toDto(Product product) {
-        String artistName = product.getArtist() != null
-                ? product.getArtist().getNickname()
-                : "Unknown Artist";
+        String artistName = product.getArtist() != null ? product.getArtist().getNickname() : "Unknown Artist";
 
-        List<String> genreNames = product.getGenres() != null
-                ? product.getGenres().stream()
-                .map(Genre::getName)
-                .collect(Collectors.toList())
-                : Collections.emptyList();
+        List<String> genreNames = product.getGenres() != null ? product.getGenres().stream().map(Genre::getName).collect(Collectors.toList()) : Collections.emptyList();
 
-        return new MultipleVinylShowDTO(
-                product.getId(),
-                product.getTitle(),
-                artistName,
-                genreNames,
-                product.getPrice()
-        );
+        return new MultipleVinylShowDTO(product.getId(), product.getTitle(), artistName, genreNames, product.getPrice());
     }
 
     public List<MultipleVinylShowDTO> getArtistVinyls(Long artistId) {
@@ -78,29 +63,23 @@ public class VinylService {
 
         List<Product> vinyls = vinylRepository.findAllVinylsByArtistIdWithGenres(artistId);
 
-        return vinyls.stream()
-                .map(this::mapToVinylShowDTO)
-                .collect(Collectors.toList());
+        return vinyls.stream().map(this::mapToVinylShowDTO).collect(Collectors.toList());
     }
-    private MultipleVinylShowDTO mapToVinylShowDTO(Product product) {
-        List<String> genreNames = product.getGenres().stream()
-                .map(Genre::getName)
-                .collect(Collectors.toList());
 
-        return new MultipleVinylShowDTO(
-                product.getId(),
-                product.getTitle(),
-                product.getArtist().getNickname(),
-                genreNames,
-                product.getPrice()
-        );
+    private MultipleVinylShowDTO mapToVinylShowDTO(Product product) {
+        List<String> genreNames = product.getGenres().stream().map(Genre::getName).collect(Collectors.toList());
+
+        return new MultipleVinylShowDTO(product.getId(), product.getTitle(), product.getArtist().getNickname(), genreNames, product.getPrice());
     }
 
     @Transactional
     public VinylShowDTO getVinylById(Long id) {
-        return vinylRepository.findById(id)
-                .map(vinylToDtoMapper::toVinylShowDTO)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого винила нет!"));
+        return vinylRepository.findById(id).map(vinylToDtoMapper::toVinylShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого винила нет!"));
+    }
+
+    public List<MultipleVinylShowDTO> getAllVinyls() {
+        List<Product> products = vinylRepository.findAllVinyls();
+        return products.stream().map(this::mapToVinylShowDTO).collect(Collectors.toList());
     }
 
 }
