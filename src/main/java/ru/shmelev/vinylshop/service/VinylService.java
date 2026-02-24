@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.shmelev.vinylshop.DTO.genre.GenreResponseDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.VinylShowDTO;
 import ru.shmelev.vinylshop.domain.Genre;
@@ -51,9 +52,19 @@ public class VinylService {
     private MultipleVinylShowDTO toDto(Product product) {
         String artistName = product.getArtist() != null ? product.getArtist().getNickname() : "Unknown Artist";
 
-        List<String> genreNames = product.getGenres() != null ? product.getGenres().stream().map(Genre::getName).collect(Collectors.toList()) : Collections.emptyList();
+        List<GenreResponseDTO> genreDTOs = product.getGenres() != null
+                ? product.getGenres().stream()
+                .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName()))
+                .collect(Collectors.toList())
+                : Collections.emptyList();
 
-        return new MultipleVinylShowDTO(product.getId(), product.getTitle(), artistName, genreNames, product.getPrice());
+        return new MultipleVinylShowDTO(
+                product.getId(),
+                product.getTitle(),
+                artistName,
+                genreDTOs,
+                product.getPrice()
+        );
     }
 
     public List<MultipleVinylShowDTO> getArtistVinyls(Long artistId) {

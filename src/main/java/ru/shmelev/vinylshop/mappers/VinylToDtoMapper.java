@@ -3,9 +3,9 @@ package ru.shmelev.vinylshop.mappers;
 import org.springframework.stereotype.Component;
 import ru.shmelev.vinylshop.DTO.*;
 import ru.shmelev.vinylshop.DTO.artist.ArtistDTO;
+import ru.shmelev.vinylshop.DTO.genre.GenreResponseDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.VinylShowDTO;
-import ru.shmelev.vinylshop.domain.Genre;
 import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.domain.Product.Track;
 
@@ -73,8 +73,26 @@ public class VinylToDtoMapper {
     }
 
     public MultipleVinylShowDTO mapToVinylShowDTO(Product product) {
-        List<String> genreNames = product.getGenres().stream().map(Genre::getName).collect(Collectors.toList());
+        if (product == null) {
+            return null;
+        }
 
-        return new MultipleVinylShowDTO(product.getId(), product.getTitle(), product.getArtist().getNickname(), genreNames, product.getPrice());
+        List<GenreResponseDTO> genreDTOs = product.getGenres() != null
+                ? product.getGenres().stream()
+                .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName()))
+                .collect(Collectors.toList())
+                : Collections.emptyList();
+
+        String artistName = product.getArtist() != null
+                ? product.getArtist().getNickname()
+                : "Unknown Artist";
+
+        return new MultipleVinylShowDTO(
+                product.getId(),
+                product.getTitle(),
+                artistName,
+                genreDTOs,
+                product.getPrice()
+        );
     }
 }
