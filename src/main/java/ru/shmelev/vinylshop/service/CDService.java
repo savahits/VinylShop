@@ -1,7 +1,11 @@
 package ru.shmelev.vinylshop.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import ru.shmelev.vinylshop.DTO.CD.CDShowDTO;
 import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
 import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.mappers.CDToDtoMapper;
@@ -22,8 +26,13 @@ public class CDService {
         this.cdToDtoMapper = cdToDtoMapper;
     }
 
-    public List<MultipleCDShowDTO> findAllCD(){
+    public List<MultipleCDShowDTO> getAllCD() {
         List<Product> products = cdRepository.findAllCD();
-        return products.stream().map(cdToDtoMapper::mapToVinylShowDTO).collect(Collectors.toList());
+        return products.stream().map(cdToDtoMapper::mapToCdShowDTO).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public CDShowDTO getCDById(Long id) {
+        return cdRepository.findById(id).map(cdToDtoMapper::toCdShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого cd нет!"));
     }
 }
