@@ -72,7 +72,7 @@ public class VinylToDtoMapper {
         return otherAttributes != null ? otherAttributes : Collections.emptyMap();
     }
 
-    public MultipleVinylShowDTO mapToVinylShowDTO(Product product) {
+    public MultipleVinylShowDTO mapToMultipleVinylShowDTO(Product product) {
         if (product == null) {
             return null;
         }
@@ -83,35 +83,14 @@ public class VinylToDtoMapper {
                 .collect(Collectors.toList())
                 : Collections.emptyList();
 
-        String artistName = product.getArtist() != null
-                ? product.getArtist().getNickname()
-                : "Unknown Artist";
+        ArtistDTO artistDTO = mapArtist(product);
 
         return new MultipleVinylShowDTO(
                 product.getId(),
                 product.getTitle(),
-                artistName,
+                artistDTO,
                 genreDTOs,
                 product.getPrice()
         );
     }
-
-    public MultipleVinylShowDTO toDto(Product product) {
-        String artistName = product.getArtist() != null ? product.getArtist().getNickname() : "Unknown Artist";
-
-        List<GenreResponseDTO> genreDTOs = product.getGenres() != null
-                ? product.getGenres().stream()
-                .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName()))
-                .collect(Collectors.toList())
-                : Collections.emptyList();
-
-        return new MultipleVinylShowDTO(
-                product.getId(),
-                product.getTitle(),
-                artistName,
-                genreDTOs,
-                product.getPrice()
-        );
-    }
-
 }
