@@ -24,6 +24,6 @@ public class CDService {
 
     public List<MultipleCDShowDTO> findAllCD(){
         List<Product> products = cdRepository.findAllCD();
-        return products.stream().map(cdToDtoMapper::mapToCDShowDTO).collect(Collectors.toList());
+        return products.stream().map(cdToDtoMapper::mapToVinylShowDTO).collect(Collectors.toList());
     }
 }
