@@ -1,5 +1,7 @@
 package ru.shmelev.vinylshop.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/genres")
+@Tag(name = "GenreController", description = "Контроллер жанров")
 public class GenreController {
 
     private final GenreService genreService;
@@ -32,11 +35,15 @@ public class GenreController {
     }
 
     @GetMapping
+    @Operation(summary = "Получить все жанры",
+            description = "Возвращает список всех доступных музыкальных жанров")
     public List<GenreResponseDTO> getAllGenres() {
         return genreService.findAll();
     }
 
     @PostMapping
+    @Operation(summary = "Создать новый жанр",
+            description = "Принимает строку, создает новый жанр")
     public ResponseEntity<GenreResponseDTO> createGenre(@Valid @RequestBody GenreCreateDTO dto) {
         GenreResponseDTO created = genreService.createGenre(dto);
 
@@ -50,6 +57,8 @@ public class GenreController {
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Удалить жанр",
+            description = "Удаляет один жанр, ничего не возвращает")
     public void deleteGenre(@PathVariable Long id) {
         genreService.deleteGenreById(id);
     }
