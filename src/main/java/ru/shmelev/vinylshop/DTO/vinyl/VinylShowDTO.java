@@ -1,4 +1,7 @@
-package ru.shmelev.vinylshop.DTO;
+package ru.shmelev.vinylshop.DTO.vinyl;
+
+import ru.shmelev.vinylshop.DTO.TrackDTO;
+import ru.shmelev.vinylshop.DTO.artist.ArtistDTO;
 
 import java.math.BigDecimal;
 import java.util.List;

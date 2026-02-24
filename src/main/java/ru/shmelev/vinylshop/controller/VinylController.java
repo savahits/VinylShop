@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shmelev.vinylshop.DTO.MultipleVinylShowDTO;
-import ru.shmelev.vinylshop.DTO.VinylShowDTO;
+import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
+import ru.shmelev.vinylshop.DTO.vinyl.VinylShowDTO;
 import ru.shmelev.vinylshop.service.VinylService;
 
 import java.util.List;

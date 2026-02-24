@@ -2,6 +2,8 @@ package ru.shmelev.vinylshop.mappers;
 
 import org.springframework.stereotype.Component;
 import ru.shmelev.vinylshop.DTO.*;
+import ru.shmelev.vinylshop.DTO.artist.ArtistDTO;
+import ru.shmelev.vinylshop.DTO.vinyl.VinylShowDTO;
 import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.domain.Product.Track;
 

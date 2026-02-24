@@ -1,4 +1,4 @@
-package ru.shmelev.vinylshop.DTO;
+package ru.shmelev.vinylshop.DTO.genre;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

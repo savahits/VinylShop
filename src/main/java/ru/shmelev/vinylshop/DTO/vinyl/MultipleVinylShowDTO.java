@@ -1,4 +1,4 @@
-package ru.shmelev.vinylshop.DTO;
+package ru.shmelev.vinylshop.DTO.vinyl;
 
 import java.math.BigDecimal;
 import java.util.List;

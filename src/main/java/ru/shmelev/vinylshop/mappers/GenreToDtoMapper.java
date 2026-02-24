@@ -2,7 +2,7 @@ package ru.shmelev.vinylshop.mappers;
 
 import org.springframework.stereotype.Component;
 import ru.shmelev.vinylshop.domain.Genre;
-import ru.shmelev.vinylshop.DTO.GenreResponseDTO;
+import ru.shmelev.vinylshop.DTO.genre.GenreResponseDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;

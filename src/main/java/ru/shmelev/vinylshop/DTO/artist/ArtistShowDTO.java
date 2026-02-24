@@ -1,4 +1,4 @@
-package ru.shmelev.vinylshop.DTO;
+package ru.shmelev.vinylshop.DTO.artist;
 
 import ru.shmelev.vinylshop.domain.Artist;
 
