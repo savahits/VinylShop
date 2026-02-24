@@ -95,4 +95,23 @@ public class VinylToDtoMapper {
                 product.getPrice()
         );
     }
+
+    public MultipleVinylShowDTO toDto(Product product) {
+        String artistName = product.getArtist() != null ? product.getArtist().getNickname() : "Unknown Artist";
+
+        List<GenreResponseDTO> genreDTOs = product.getGenres() != null
+                ? product.getGenres().stream()
+                .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName()))
+                .collect(Collectors.toList())
+                : Collections.emptyList();
+
+        return new MultipleVinylShowDTO(
+                product.getId(),
+                product.getTitle(),
+                artistName,
+                genreDTOs,
+                product.getPrice()
+        );
+    }
+
 }

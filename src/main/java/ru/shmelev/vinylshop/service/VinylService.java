@@ -46,26 +46,9 @@ public class VinylService {
             return Collections.emptyList();
         }
 
-        return products.stream().map(this::toDto).collect(Collectors.toList());
+        return products.stream().map(vinylToDtoMapper::toDto).collect(Collectors.toList());
     }
 
-    private MultipleVinylShowDTO toDto(Product product) {
-        String artistName = product.getArtist() != null ? product.getArtist().getNickname() : "Unknown Artist";
-
-        List<GenreResponseDTO> genreDTOs = product.getGenres() != null
-                ? product.getGenres().stream()
-                .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName()))
-                .collect(Collectors.toList())
-                : Collections.emptyList();
-
-        return new MultipleVinylShowDTO(
-                product.getId(),
-                product.getTitle(),
-                artistName,
-                genreDTOs,
-                product.getPrice()
-        );
-    }
 
     public List<MultipleVinylShowDTO> getArtistVinyls(Long artistId) {
         if (!artistRepository.existsById(artistId)) {
@@ -90,6 +73,3 @@ public class VinylService {
     }
 
 }
-
-
-
