@@ -16,4 +16,7 @@ public interface VinylRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN p.genres g WHERE g.id = :genreId AND p.format = 'vinyl'")
     List<Product> findByGenreIdAndFormatWithArtist(@Param("genreId") Long genreId);
+
+    @Query("select p from Product p where p.format = 'vinyl'")
+    List<Product> findAllVinyls();
 }
