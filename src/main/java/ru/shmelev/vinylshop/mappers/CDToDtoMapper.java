@@ -50,14 +50,12 @@ public class CDToDtoMapper{
                 .collect(Collectors.toList())
                 : Collections.emptyList();
 
-        String artistName = product.getArtist() != null
-                ? product.getArtist().getNickname()
-                : "Unknown Artist";
+        ArtistDTO artistDTO = mapArtist(product);
 
         return new MultipleCDShowDTO(
                 product.getId(),
                 product.getTitle(),
-                artistName,
+                artistDTO,
                 genreDTOs,
                 product.getPrice()
         );
