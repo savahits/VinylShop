@@ -27,4 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select p from Product p where p.format = 'vinyl' and p.id = :vinylId")
     Optional<Product> findVinylById(@Param("vinylId") Long vinylId);
 
+    @Query("select p from Product p where p.format = 'cd' and p.id = :CDId")
+    Optional<Product> findCDById(@Param("CDId") Long cdId);
+
 }
