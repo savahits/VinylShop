@@ -38,7 +38,7 @@ public class VinylService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого жанра нет!");
         }
 
-        List<Product> products = productRepository.findByGenreIdAndFormatWithArtist(genreId);
+        List<Product> products = productRepository.findAllVinylsByGenreId(genreId);
 
         if (products.isEmpty()) {
             return Collections.emptyList();
