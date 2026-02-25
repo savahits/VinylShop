@@ -1,5 +1,6 @@
 package ru.shmelev.vinylshop.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +24,15 @@ public class VinylController {
     }
 
     @GetMapping
+    @Operation(summary = "Получить все возможные винилы",
+            description = "Возвращает список всех возможных винилов")
     public List<MultipleVinylShowDTO> getVinyls() {
         return vinylService.getAllVinyls();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Получить информацию про конкретный винил",
+            description = "Возвращает всю информацию про данный винил")
     public VinylShowDTO getVinyl(@PathVariable("id") Long id) {
         return vinylService.getVinylById(id);
     }
