@@ -1,5 +1,6 @@
 package ru.shmelev.vinylshop.mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.shmelev.vinylshop.DTO.CD.CDShowDTO;
 import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
@@ -15,6 +16,13 @@ import java.util.stream.Collectors;
 @Component
 public class CDToDtoMapper{
 
+    private final GenreToDtoMapper genreToDtoMapper;
+
+    @Autowired
+    public CDToDtoMapper(GenreToDtoMapper genreToDtoMapper) {
+        this.genreToDtoMapper = genreToDtoMapper;
+    }
+
     public CDShowDTO toCdShowDTO(Product product) {
         if (product == null) {
             return null;
@@ -28,6 +36,7 @@ public class CDToDtoMapper{
                 product.getId(),
                 product.getTitle(),
                 mapArtist(product),
+                genreToDtoMapper.convert(product.getGenres()),
                 product.getLabel(),
                 product.getCountry(),
                 product.getReleaseYear(),
