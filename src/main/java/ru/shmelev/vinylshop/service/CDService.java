@@ -9,7 +9,7 @@ import ru.shmelev.vinylshop.DTO.CD.CDShowDTO;
 import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
 import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.mappers.CDToDtoMapper;
-import ru.shmelev.vinylshop.repository.CDRepository;
+import ru.shmelev.vinylshop.repository.ProductRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,22 +17,22 @@ import java.util.stream.Collectors;
 @Service
 public class CDService {
 
-    private final CDRepository cdRepository;
+    private final ProductRepository productRepository;
     private final CDToDtoMapper cdToDtoMapper;
 
     @Autowired
-    public CDService(CDRepository cdRepository, CDToDtoMapper cdToDtoMapper) {
-        this.cdRepository = cdRepository;
+    public CDService(ProductRepository productRepository, CDToDtoMapper cdToDtoMapper) {
+        this.productRepository = productRepository;
         this.cdToDtoMapper = cdToDtoMapper;
     }
 
     public List<MultipleCDShowDTO> getAllCD() {
-        List<Product> products = cdRepository.findAllCD();
+        List<Product> products = productRepository.findAllCD();
         return products.stream().map(cdToDtoMapper::mapToMultipleCdShowDTO).collect(Collectors.toList());
     }
 
     @Transactional
     public CDShowDTO getCDById(Long id) {
-        return cdRepository.findById(id).map(cdToDtoMapper::toCdShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого cd нет!"));
+        return productRepository.findById(id).map(cdToDtoMapper::toCdShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого cd нет!"));
     }
 }
