@@ -39,7 +39,7 @@ public class CDToDtoMapper{
         );
     }
 
-    public MultipleCDShowDTO mapToCdShowDTO(Product product) {
+    public MultipleCDShowDTO mapToMultipleCdShowDTO(Product product) {
         if (product == null) {
             return null;
         }
