@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -59,6 +60,7 @@ public class GenreController {
     @DeleteMapping("{id}")
     @Operation(summary = "Удалить жанр",
             description = "Удаляет один жанр, ничего не возвращает")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGenre(@PathVariable Long id) {
         genreService.deleteGenreById(id);
     }
