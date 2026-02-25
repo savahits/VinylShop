@@ -1,5 +1,6 @@
 package ru.shmelev.vinylshop.mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.shmelev.vinylshop.DTO.artist.ArtistShowDTO;
 import ru.shmelev.vinylshop.DTO.artist.MultipleArtistsShowDTO;
@@ -11,6 +12,13 @@ import java.util.stream.Collectors;
 @Component
 public class ArtistToDtoMapper {
 
+    private final GenreToDtoMapper genreToDtoMapper;
+
+    @Autowired
+    public ArtistToDtoMapper(GenreToDtoMapper genreToDtoMapper) {
+        this.genreToDtoMapper = genreToDtoMapper;
+    }
+
     public ArtistShowDTO toShowDTO(Artist artist) {
         if (artist == null) {
             return null;
@@ -19,6 +27,7 @@ public class ArtistToDtoMapper {
                 artist.getId(),
                 artist.getNickname(),
                 artist.getDescription(),
+                genreToDtoMapper.convert(artist.getGenres()),
                 artist.getDiscography()
         );
     }
