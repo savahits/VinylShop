@@ -62,7 +62,7 @@ public class VinylService {
 
     @Transactional
     public VinylShowDTO getVinylById(Long id) {
-        return productRepository.findById(id).map(vinylToDtoMapper::toVinylShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого винила нет!"));
+        return productRepository.findVinylById(id).map(vinylToDtoMapper::toVinylShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого винила нет!"));
     }
 
     public List<MultipleVinylShowDTO> getAllVinyls() {
