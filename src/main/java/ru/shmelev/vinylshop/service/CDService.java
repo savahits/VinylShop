@@ -33,6 +33,6 @@ public class CDService {
 
     @Transactional
     public CDShowDTO getCDById(Long id) {
-        return productRepository.findById(id).map(cdToDtoMapper::toCdShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого cd нет!"));
+        return productRepository.findCDById(id).map(cdToDtoMapper::toCdShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого cd нет!"));
     }
 }
