@@ -8,11 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
 import ru.shmelev.vinylshop.DTO.genre.GenreCreateDTO;
 import ru.shmelev.vinylshop.DTO.genre.GenreResponseDTO;
 import ru.shmelev.vinylshop.DTO.artist.MultipleArtistsShowDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.service.ArtistService;
+import ru.shmelev.vinylshop.service.CDService;
 import ru.shmelev.vinylshop.service.GenreService;
 import ru.shmelev.vinylshop.service.VinylService;
 
@@ -27,12 +29,14 @@ public class GenreController {
     private final GenreService genreService;
     private final ArtistService artistService;
     private final VinylService vinylService;
+    private final CDService cdService;
 
     @Autowired
-    public GenreController(GenreService genreService, ArtistService artistService, VinylService vinylService) {
+    public GenreController(GenreService genreService, ArtistService artistService, VinylService vinylService, CDService cdService) {
         this.genreService = genreService;
         this.artistService = artistService;
         this.vinylService = vinylService;
+        this.cdService = cdService;
     }
 
     @GetMapping
@@ -79,4 +83,13 @@ public class GenreController {
     public List<MultipleVinylShowDTO> getVinylsByGenre(@PathVariable Long id) {
         return vinylService.getVinylsByGenre(id);
     }
+
+    @GetMapping("/{id}/cd")
+    @Operation(summary = "Получить CD данного жанра",
+            description = "Возвращает список CD, относящихся к данному жанру")
+    public List<MultipleCDShowDTO> getCDByGenre(@PathVariable Long id) {
+        return cdService.getCDByGenre(id);
+    }
+
+
 }
