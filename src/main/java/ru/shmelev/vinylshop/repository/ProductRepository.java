@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import ru.shmelev.vinylshop.domain.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -22,5 +23,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("select p from Product p where p.format = 'cd'")
     List<Product> findAllCD();
+
+    @Query("select p from Product p where p.format = 'vinyl' and p.id = :vinylId")
+    Optional<Product> findVinylById(@Param("vinylId") Long vinylId);
 
 }
