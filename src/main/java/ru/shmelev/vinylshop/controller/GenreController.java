@@ -65,11 +65,15 @@ public class GenreController {
 
 
     @GetMapping("/{id}/artists")
+    @Operation(summary = "Получить артистов данного жанра",
+            description = "Возвращает список артистов, исполняющих в данном жанре")
     public List<MultipleArtistsShowDTO> getArtistsByGenre(@PathVariable Long id) {
         return artistService.getArtistsByGenreId(id);
     }
 
     @GetMapping("/{id}/vinyls")
+    @Operation(summary = "Получить винилы данного жанра",
+            description = "Возвращает список винила, относящихся к данному жанру")
     public List<MultipleVinylShowDTO> getVinylsByGenre(@PathVariable Long id) {
         return vinylService.getVinylsByGenre(id);
     }
