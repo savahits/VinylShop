@@ -1,9 +1,16 @@
 package ru.shmelev.vinylshop.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,10 +78,19 @@ public class GenreController {
 
 
     @GetMapping("/{id}/artists")
-    @Operation(summary = "Получить артистов данного жанра",
-            description = "Возвращает список артистов, исполняющих в данном жанре")
-    public List<MultipleArtistsShowDTO> getArtistsByGenre(@PathVariable Long id) {
-        return artistService.getArtistsByGenreId(id);
+    @Operation(summary = "Получить артистов данного жанра (с пагинацией)")
+    @Parameters({
+            @Parameter(name = "page", description = "Номер страницы", example = "0", in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "Размер страницы", example = "10", in = ParameterIn.QUERY),
+            @Parameter(name = "sort", description = "Сортировка в формате: поле,направление. Например: id,asc или nickname,desc",
+                    example = "id,asc", in = ParameterIn.QUERY)
+    })
+    public Page<MultipleArtistsShowDTO> getArtistsByGenre(
+            @PathVariable Long id,
+            @PageableDefault(size = 20, sort = "nickname", direction = Sort.Direction.ASC)
+            Pageable pageable) {
+
+        return artistService.getArtistsByGenreId(id, pageable);
     }
 
     @GetMapping("/{id}/vinyls")
