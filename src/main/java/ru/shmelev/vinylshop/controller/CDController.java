@@ -1,5 +1,6 @@
 package ru.shmelev.vinylshop.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +24,15 @@ public class CDController {
     }
 
     @GetMapping
+    @Operation(summary = "Получить все возможные CD",
+            description = "Возвращает список всех существующих CD")
     public List<MultipleCDShowDTO> getCDs() {
         return cdService.getAllCD();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Получить информацию про конкретный CD",
+            description = "Возвращает всю информацию про данный CD")
     public CDShowDTO getCDById(@PathVariable Long id) {
         return cdService.getCDById(id);
     }
