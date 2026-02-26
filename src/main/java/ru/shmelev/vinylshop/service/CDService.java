@@ -9,6 +9,7 @@ import ru.shmelev.vinylshop.DTO.CD.CDShowDTO;
 import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
 import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.mappers.CDToDtoMapper;
+import ru.shmelev.vinylshop.repository.ArtistRepository;
 import ru.shmelev.vinylshop.repository.GenreRepository;
 import ru.shmelev.vinylshop.repository.ProductRepository;
 
@@ -22,12 +23,15 @@ public class CDService {
     private final ProductRepository productRepository;
     private final CDToDtoMapper cdToDtoMapper;
     private final GenreRepository genreRepository;
+    private final ArtistRepository artistRepository;
 
     @Autowired
-    public CDService(ProductRepository productRepository, CDToDtoMapper cdToDtoMapper, GenreRepository genreRepository) {
+    public CDService(ProductRepository productRepository, CDToDtoMapper cdToDtoMapper, GenreRepository genreRepository,
+                     ArtistRepository artistRepository) {
         this.productRepository = productRepository;
         this.cdToDtoMapper = cdToDtoMapper;
         this.genreRepository = genreRepository;
+        this.artistRepository = artistRepository;
     }
 
     public List<MultipleCDShowDTO> getAllCD() {
@@ -53,4 +57,15 @@ public class CDService {
 
         return products.stream().map(cdToDtoMapper::mapToMultipleCdShowDTO).collect(Collectors.toList());
     }
+
+    public List<MultipleCDShowDTO> getArtistCD(Long artistId) {
+        if (!artistRepository.existsById(artistId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого артиста нет!");
+        }
+
+        List<Product> vinyls = productRepository.findAllCDByArtistId(artistId);
+
+        return vinyls.stream().map(cdToDtoMapper::mapToMultipleCdShowDTO).collect(Collectors.toList());
+    }
+
 }
