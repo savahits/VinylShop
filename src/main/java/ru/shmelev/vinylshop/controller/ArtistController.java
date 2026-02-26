@@ -4,10 +4,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
 import ru.shmelev.vinylshop.DTO.artist.ArtistShowDTO;
 import ru.shmelev.vinylshop.DTO.artist.MultipleArtistsShowDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.service.ArtistService;
+import ru.shmelev.vinylshop.service.CDService;
 import ru.shmelev.vinylshop.service.VinylService;
 
 import java.util.List;
@@ -18,11 +20,13 @@ public class ArtistController {
 
     private final ArtistService artistService;
     private final VinylService vinylService;
+    private final CDService cdService;
 
     @Autowired
-    public ArtistController(ArtistService artistService, VinylService vinylService) {
+    public ArtistController(ArtistService artistService, VinylService vinylService, CDService cdService) {
         this.artistService = artistService;
         this.vinylService = vinylService;
+        this.cdService = cdService;
     }
 
     @GetMapping
@@ -45,6 +49,14 @@ public class ArtistController {
     public List<MultipleVinylShowDTO> getVinyls(@PathVariable Long id) {
         return vinylService.getArtistVinyls(id);
     }
+
+    @GetMapping("{id}/cd")
+    @Operation(summary = "Получить все CD данного артиста",
+            description = "Возвращает все CD данного артиста")
+    public List<MultipleCDShowDTO> getArtistCD(@PathVariable Long id) {
+        return cdService.getArtistCD(id);
+    }
+
 
     @DeleteMapping("{id}")
     @Operation(summary = "Удалить артиста",
