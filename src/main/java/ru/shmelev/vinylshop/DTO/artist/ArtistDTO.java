@@ -1,3 +1,3 @@
 package ru.shmelev.vinylshop.DTO.artist;
 
-public record ArtistDTO(Long id, String name) {}
+public record ArtistDTO(Long id, String nickName) {}
