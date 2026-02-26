@@ -1,6 +1,8 @@
 package ru.shmelev.vinylshop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,16 +31,16 @@ public class ArtistService {
         this.genreRepository = genreRepository;
     }
 
-     @Transactional(readOnly = true)
-    public List<MultipleArtistsShowDTO> getArtistsByGenreId(Long genreId) {
+    @Transactional(readOnly = true)
+    public Page<MultipleArtistsShowDTO> getArtistsByGenreId(Long genreId, Pageable pageable) {
         if (!genreRepository.existsById(genreId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Жанр не найден");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого жанра нет!");
         }
 
-        List<Artist> artists = artistRepository.findByGenresId(genreId);
-        return artistToDtoMapper.toShowDTOList(artists);
-
+        Page<Artist> artistPage = artistRepository.findByGenresId(genreId, pageable);
+        return artistPage.map(artistToDtoMapper::toMultipleShowDTO);
     }
+
     public List<MultipleArtistsShowDTO> getAllArtists() {
         return artistToDtoMapper.toShowDTOList(artistRepository.findAll());
     }
