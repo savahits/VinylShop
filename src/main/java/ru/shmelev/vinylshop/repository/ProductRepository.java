@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p JOIN FETCH p.genres WHERE p.artist.id = :artistId AND p.format = 'vinyl'")
-    List<Product> findAllVinylsByArtistIdWithGenres(@Param("artistId") Long artistId);
+    List<Product> findAllVinylsByArtistId(@Param("artistId") Long artistId);
 
     @Query("SELECT p FROM Product p JOIN FETCH p.genres WHERE p.artist.id = :artistId AND p.format = 'cd'")
     List<Product> findAllCDByArtistId(@Param("artistId") Long artistId);

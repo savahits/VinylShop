@@ -53,7 +53,7 @@ public class VinylService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого артиста нет!");
         }
 
-        List<Product> vinyls = productRepository.findAllVinylsByArtistIdWithGenres(artistId);
+        List<Product> vinyls = productRepository.findAllVinylsByArtistId(artistId);
 
         return vinyls.stream().map(vinylToDtoMapper::mapToMultipleVinylShowDTO).collect(Collectors.toList());
     }
