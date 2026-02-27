@@ -47,6 +47,7 @@ public class ArtistService {
         return artistPage.map(artistToDtoMapper::toMultipleShowDTO);
     }
 
+    @Deprecated
     public List<MultipleArtistsShowDTO> getAllArtists() {
         return artistToDtoMapper.toShowDTOList(artistRepository.findAll());
     }
