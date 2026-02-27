@@ -1,7 +1,14 @@
 package ru.shmelev.vinylshop.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
@@ -30,10 +37,18 @@ public class ArtistController {
     }
 
     @GetMapping
-    @Operation(summary = "Получить всех возможных артистов",
-            description = "Возвращает список всех существующих артистов")
-    public List<MultipleArtistsShowDTO> getArtists() {
-        return artistService.getAllArtists();
+    @Operation(summary = "Получить всех возможных артистов (с пагинацией)",
+            description = "Возвращает страницу существующих артистов")
+    @Parameters({
+            @Parameter(name = "page", description = "Номер страницы", example = "0", in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "Размер страницы", example = "10", in = ParameterIn.QUERY),
+            @Parameter(name = "sort", description = "Сортировка в формате: поле,направление. Например: id,asc или nickname,desc",
+                    example = "id,asc", in = ParameterIn.QUERY)
+    })
+    public Page<MultipleArtistsShowDTO> getArtists(
+            @PageableDefault(size = 20, sort = "nickname", direction = Sort.Direction.ASC)
+            Pageable pageable) {
+        return artistService.getAllArtists(pageable);
     }
 
     @GetMapping("{id}")
