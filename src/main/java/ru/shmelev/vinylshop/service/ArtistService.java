@@ -41,6 +41,12 @@ public class ArtistService {
         return artistPage.map(artistToDtoMapper::toMultipleShowDTO);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MultipleArtistsShowDTO> getAllArtists(Pageable pageable) {
+        Page<Artist> artistPage = artistRepository.findAll(pageable);
+        return artistPage.map(artistToDtoMapper::toMultipleShowDTO);
+    }
+
     public List<MultipleArtistsShowDTO> getAllArtists() {
         return artistToDtoMapper.toShowDTOList(artistRepository.findAll());
     }
