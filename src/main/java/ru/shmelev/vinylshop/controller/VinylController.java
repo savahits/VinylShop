@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,19 +31,19 @@ public class VinylController {
     @GetMapping
     @Operation(summary = "Получить все возможные винилы",
             description = "Возвращает список всех возможных винилов")
-    public List<MultipleVinylShowDTO> getVinyls() {
-        return vinylService.getAllVinyls();
+    public ResponseEntity<List<MultipleVinylShowDTO>> getVinyls() {
+        return ResponseEntity.ok(vinylService.getAllVinyls());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить информацию про конкретный винил",
             description = "Возвращает всю информацию про данный винил. При include=true добавляет otherArtistVinyls — остальные винилы этого же артиста.")
-    public VinylDetailResponseDTO getVinyl(
+    public ResponseEntity<VinylDetailResponseDTO> getVinyl(
             @PathVariable Long id,
             @Parameter(description = "Если true — включает список винилов других артистов (otherArtistVinyls)")
             @RequestParam(value = "include", required = false, defaultValue = "false") String include) {
         boolean includeOtherArtistVinyls = "true".equalsIgnoreCase(include);
-        return vinylService.getVinylById(id, includeOtherArtistVinyls);
+        return ResponseEntity.ok(vinylService.getVinylById(id, includeOtherArtistVinyls));
     }
 
 }

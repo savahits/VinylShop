@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
 import ru.shmelev.vinylshop.DTO.artist.ArtistShowDTO;
@@ -47,40 +47,40 @@ public class ArtistController {
             @Parameter(name = "sort", description = "Сортировка в формате: поле,направление. Например: id,asc или nickname,desc",
                     example = "id,asc", in = ParameterIn.QUERY)
     })
-    public Page<MultipleArtistsShowDTO> getArtists(
+    public ResponseEntity<Page<MultipleArtistsShowDTO>> getArtists(
             @PageableDefault(size = 20, sort = "nickname", direction = Sort.Direction.ASC)
             Pageable pageable) {
-        return artistService.getAllArtists(pageable);
+        return ResponseEntity.ok(artistService.getAllArtists(pageable));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить информацию про конкретного артиста",
             description = "Возвращает всю информацию про данного артиста")
-    public ArtistShowDTO getArtist(@PathVariable Long id) {
-        return artistService.getArtistById(id);
+    public ResponseEntity<ArtistShowDTO> getArtist(@PathVariable Long id) {
+        return ResponseEntity.ok(artistService.getArtistById(id));
     }
 
     @GetMapping("/{id}/vinyls")
     @Operation(summary = "Получить все винилы данного артиста",
             description = "Возвращает все винилы данного артиста")
-    public List<MultipleVinylShowDTO> getVinyls(@PathVariable Long id) {
-        return vinylService.getArtistVinyls(id);
+    public ResponseEntity<List<MultipleVinylShowDTO>> getVinyls(@PathVariable Long id) {
+        return ResponseEntity.ok(vinylService.getArtistVinyls(id));
     }
 
     @GetMapping("/{id}/cd")
     @Operation(summary = "Получить все CD данного артиста",
             description = "Возвращает все CD данного артиста")
-    public List<MultipleCDShowDTO> getArtistCD(@PathVariable Long id) {
-        return cdService.getArtistCD(id);
+    public ResponseEntity<List<MultipleCDShowDTO>> getArtistCD(@PathVariable Long id) {
+        return ResponseEntity.ok(cdService.getArtistCD(id));
     }
 
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить артиста",
             description = "Удаляет данного артиста, ничего не возвращает")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteArtist(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteArtist(@PathVariable Long id) {
         artistService.deleteArtistById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

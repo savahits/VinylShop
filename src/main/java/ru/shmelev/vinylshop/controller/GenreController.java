@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -49,8 +48,8 @@ public class GenreController {
     @GetMapping
     @Operation(summary = "Получить все жанры",
             description = "Возвращает список всех доступных музыкальных жанров")
-    public List<GenreResponseDTO> getAllGenres() {
-        return genreService.findAll();
+    public ResponseEntity<List<GenreResponseDTO>> getAllGenres() {
+        return ResponseEntity.ok(genreService.findAll());
     }
 
     @PostMapping
@@ -71,9 +70,9 @@ public class GenreController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить жанр",
             description = "Удаляет один жанр, ничего не возвращает")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteGenre(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteGenre(@PathVariable Long id) {
         genreService.deleteGenreById(id);
+        return ResponseEntity.noContent().build();
     }
 
 
@@ -85,26 +84,25 @@ public class GenreController {
             @Parameter(name = "sort", description = "Сортировка в формате: поле,направление. Например: id,asc или nickname,desc",
                     example = "id,asc", in = ParameterIn.QUERY)
     })
-    public Page<MultipleArtistsShowDTO> getArtistsByGenre(
+    public ResponseEntity<Page<MultipleArtistsShowDTO>> getArtistsByGenre(
             @PathVariable Long id,
             @PageableDefault(size = 20, sort = "nickname", direction = Sort.Direction.ASC)
             Pageable pageable) {
-
-        return artistService.getArtistsByGenreId(id, pageable);
+        return ResponseEntity.ok(artistService.getArtistsByGenreId(id, pageable));
     }
 
     @GetMapping("/{id}/vinyls")
     @Operation(summary = "Получить винилы данного жанра",
             description = "Возвращает список винила, относящихся к данному жанру")
-    public List<MultipleVinylShowDTO> getVinylsByGenre(@PathVariable Long id) {
-        return vinylService.getVinylsByGenre(id);
+    public ResponseEntity<List<MultipleVinylShowDTO>> getVinylsByGenre(@PathVariable Long id) {
+        return ResponseEntity.ok(vinylService.getVinylsByGenre(id));
     }
 
     @GetMapping("/{id}/cd")
     @Operation(summary = "Получить CD данного жанра",
             description = "Возвращает список CD, относящихся к данному жанру")
-    public List<MultipleCDShowDTO> getCDByGenre(@PathVariable Long id) {
-        return cdService.getCDByGenre(id);
+    public ResponseEntity<List<MultipleCDShowDTO>> getCDByGenre(@PathVariable Long id) {
+        return ResponseEntity.ok(cdService.getCDByGenre(id));
     }
 
 
