@@ -6,12 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
+import ru.shmelev.vinylshop.DTO.vinyl.VinylDetailResponseDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.VinylShowDTO;
 import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.mappers.VinylToDtoMapper;
 import ru.shmelev.vinylshop.repository.ArtistRepository;
 import ru.shmelev.vinylshop.repository.GenreRepository;
 import ru.shmelev.vinylshop.repository.ProductRepository;
+
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,8 +64,24 @@ public class VinylService {
 
 
     @Transactional
-    public VinylShowDTO getVinylById(Long id) {
-        return productRepository.findVinylById(id).map(vinylToDtoMapper::toVinylShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого винила нет!"));
+    public VinylDetailResponseDTO getVinylById(Long id, boolean includeOtherArtistVinyls) {
+        Product product = productRepository.findVinylById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого винила нет!"));
+        VinylShowDTO vinyl = vinylToDtoMapper.toVinylShowDTO(product);
+
+        List<MultipleVinylShowDTO> otherArtistVinyls = Collections.emptyList();
+        if (includeOtherArtistVinyls) {
+            List<Product> otherVinyls = productRepository.findOtherArtistVinyls(
+                    product.getArtist().getId(),
+                    id,
+                    PageRequest.of(0, 10)
+            );
+            otherArtistVinyls = otherVinyls.stream()
+                    .map(vinylToDtoMapper::mapToMultipleVinylShowDTO)
+                    .collect(Collectors.toList());
+        }
+
+        return new VinylDetailResponseDTO(vinyl, otherArtistVinyls);
     }
 
     public List<MultipleVinylShowDTO> getAllVinyls() {
