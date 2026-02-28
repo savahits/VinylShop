@@ -68,7 +68,7 @@ public class GenreController {
         return ResponseEntity.created(location).body(created);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Удалить жанр",
             description = "Удаляет один жанр, ничего не возвращает")
     @ResponseStatus(HttpStatus.NO_CONTENT)

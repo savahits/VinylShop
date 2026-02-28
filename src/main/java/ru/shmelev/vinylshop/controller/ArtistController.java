@@ -1,6 +1,7 @@
 package ru.shmelev.vinylshop.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/artists")
+@Tag(name = "ArtistController", description = "Контроллер артистов")
 public class ArtistController {
 
     private final ArtistService artistService;
@@ -51,21 +53,21 @@ public class ArtistController {
         return artistService.getAllArtists(pageable);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Получить информацию про конкретного артиста",
             description = "Возвращает всю информацию про данного артиста")
     public ArtistShowDTO getArtist(@PathVariable Long id) {
         return artistService.getArtistById(id);
     }
 
-    @GetMapping("{id}/vinyls")
+    @GetMapping("/{id}/vinyls")
     @Operation(summary = "Получить все винилы данного артиста",
             description = "Возвращает все винилы данного артиста")
     public List<MultipleVinylShowDTO> getVinyls(@PathVariable Long id) {
         return vinylService.getArtistVinyls(id);
     }
 
-    @GetMapping("{id}/cd")
+    @GetMapping("/{id}/cd")
     @Operation(summary = "Получить все CD данного артиста",
             description = "Возвращает все CD данного артиста")
     public List<MultipleCDShowDTO> getArtistCD(@PathVariable Long id) {
@@ -73,7 +75,7 @@ public class ArtistController {
     }
 
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Удалить артиста",
             description = "Удаляет данного артиста, ничего не возвращает")
     @ResponseStatus(HttpStatus.NO_CONTENT)
