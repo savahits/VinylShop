@@ -5,11 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
 import ru.shmelev.vinylshop.DTO.vinyl.VinylDetailResponseDTO;
 import ru.shmelev.vinylshop.service.VinylService;
@@ -44,6 +40,11 @@ public class VinylController {
             @RequestParam(value = "include", required = false, defaultValue = "false") String include) {
         boolean includeOtherArtistVinyls = "true".equalsIgnoreCase(include);
         return ResponseEntity.ok(vinylService.getVinylById(id, includeOtherArtistVinyls));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteVinyl(@PathVariable Long id){
+        vinylService.deleteVinylById(id);
     }
 
 }
