@@ -61,8 +61,6 @@ public class VinylService {
         return vinyls.stream().map(vinylToDtoMapper::mapToMultipleVinylShowDTO).collect(Collectors.toList());
     }
 
-
-
     @Transactional
     public VinylDetailResponseDTO getVinylById(Long id, boolean includeOtherArtistVinyls) {
         Product product = productRepository.findVinylById(id)
@@ -87,6 +85,14 @@ public class VinylService {
     public List<MultipleVinylShowDTO> getAllVinyls() {
         List<Product> products = productRepository.findAllVinyls();
         return products.stream().map(vinylToDtoMapper::mapToMultipleVinylShowDTO).collect(Collectors.toList());
+    }
+
+    public void deleteVinylById(long vinylId){
+        if (!productRepository.existsById(vinylId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого винила нет!");
+        }
+
+        productRepository.deleteById(vinylId);
     }
 
 }
