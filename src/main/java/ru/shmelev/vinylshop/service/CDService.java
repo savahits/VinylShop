@@ -2,11 +2,16 @@ package ru.shmelev.vinylshop.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.shmelev.vinylshop.DTO.CD.CDDetailResponseDTO;
 import ru.shmelev.vinylshop.DTO.CD.CDShowDTO;
 import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
+import ru.shmelev.vinylshop.DTO.vinyl.MultipleVinylShowDTO;
+import ru.shmelev.vinylshop.DTO.vinyl.VinylDetailResponseDTO;
+import ru.shmelev.vinylshop.DTO.vinyl.VinylShowDTO;
 import ru.shmelev.vinylshop.domain.Product;
 import ru.shmelev.vinylshop.mappers.CDToDtoMapper;
 import ru.shmelev.vinylshop.repository.ArtistRepository;
@@ -40,8 +45,24 @@ public class CDService {
     }
 
     @Transactional
-    public CDShowDTO getCDById(Long id) {
-        return productRepository.findCDById(id).map(cdToDtoMapper::toCdShowDTO).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого cd нет!"));
+    public CDDetailResponseDTO getCDById(Long id, boolean includeOtherCDs) {
+        Product product = productRepository.findCDById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Такого cd нет!"));
+        CDShowDTO cd = cdToDtoMapper.toCdShowDTO(product);
+
+        List<MultipleCDShowDTO> otherArtistCD = Collections.emptyList();
+        if (includeOtherCDs) {
+            List<Product> otherCDs = productRepository.findOtherArtistCDs(
+                    product.getArtist().getId(),
+                    id,
+                    PageRequest.of(0, 10)
+            );
+            otherArtistCD = otherCDs.stream()
+                    .map(cdToDtoMapper::mapToMultipleCdShowDTO)
+                    .toList();
+        }
+
+        return new CDDetailResponseDTO(cd, otherArtistCD);
     }
 
     public List<MultipleCDShowDTO> getCDByGenre(Long genreId) {
