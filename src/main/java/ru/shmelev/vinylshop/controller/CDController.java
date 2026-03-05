@@ -1,14 +1,16 @@
 package ru.shmelev.vinylshop.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shmelev.vinylshop.DTO.CD.CDShowDTO;
+import ru.shmelev.vinylshop.DTO.CD.CDDetailResponseDTO;
 import ru.shmelev.vinylshop.DTO.CD.MultipleCDShowDTO;
 import ru.shmelev.vinylshop.service.CDService;
 
@@ -35,8 +37,12 @@ public class CDController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить информацию про конкретный CD",
-            description = "Возвращает всю информацию про данный CD")
-    public ResponseEntity<CDShowDTO> getCDById(@PathVariable Long id) {
-        return ResponseEntity.ok(cdService.getCDById(id));
+            description = "Возвращает всю информацию про данный CD. При include=true добавляет otherArtistCDs — дополнительные CD для рекомендаций.")
+    public ResponseEntity<CDDetailResponseDTO> getCDById(
+            @PathVariable Long id,
+            @Parameter(description = "Если true — включает список других CD (otherArtistCDs)")
+            @RequestParam(value = "include", required = false, defaultValue = "false") String include) {
+        boolean includeOtherArtistCDs = "true".equalsIgnoreCase(include);
+        return ResponseEntity.ok(cdService.getCDById(id, includeOtherArtistCDs));
     }
 }
