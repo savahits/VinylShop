@@ -37,7 +37,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select p from Product p where p.format = 'cd' and p.id = :CDId")
     Optional<Product> findCDById(@Param("CDId") Long cdId);
 
-    @Query("SELECT p FROM Product p JOIN FETCH p.artist JOIN FETCH p.genres WHERE p.format = 'vinyl' AND p.id != :excludeVinylId")
-    List<Product> findOtherArtistVinyls(@Param("artistId") Long artistId, @Param("excludeVinylId") Long excludeVinylId, Pageable pageable);
+    @Query("SELECT p FROM Product p " +
+            "LEFT JOIN FETCH p.artist " +
+            "WHERE p.format = 'vinyl' " +
+            "AND p.artist.id = :artistId " +
+            "AND p.id != :excludeVinylId")
+    List<Product> findOtherArtistVinyls(@Param("artistId") Long artistId,
+                                        @Param("excludeVinylId") Long excludeVinylId,
+                                        Pageable pageable);
+
+    @Query("SELECT p FROM Product p " +
+            "LEFT JOIN FETCH p.artist " +
+            "WHERE p.format = 'cd' " +
+            "AND p.artist.id = :artistId " +
+            "AND p.id != :excludeCDId")
+    List<Product> findOtherArtistCDs(@Param("artistId") Long artistId, @Param("excludeCDId") Long excludeCDId, Pageable pageable);
 
 }
